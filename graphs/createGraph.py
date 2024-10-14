@@ -18,16 +18,15 @@ def create_graph(file_path):
             exit()
 
         edges = data[1:]
-        nodes = len(set([item for sublist in edges for item in sublist]))
+        nodes = list(set([item for sublist in edges for item in sublist[:2]]))
 
-        for i in range(nodes):
-            graph.add_node()
+        for i in range(len(nodes)):
+            graph.add_node(nodes[i])
 
         for edge in edges:
-            graph.add_edge(int(edge[0]), int(edge[1]))
+            graph.add_edge(edge[0], edge[1])
 
         return graph
 
 
-graph = create_graph("data.txt")
-graph.plot_graph()
+
