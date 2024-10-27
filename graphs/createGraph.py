@@ -1,5 +1,5 @@
-from graph import Graph
-from directedGraph import DirectedGraph
+from graphs.graph import Graph
+from graphs.directedGraph import DirectedGraph
 
 
 def create_graph(file_path):

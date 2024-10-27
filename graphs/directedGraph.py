@@ -5,6 +5,7 @@ import itertools as it
 
 class DirectedGraph:
     def __init__(self):
+        self.type = "D"
         self.matrix = []
         self.nodes = []
 

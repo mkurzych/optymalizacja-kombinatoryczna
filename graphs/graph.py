@@ -5,6 +5,7 @@ import itertools as it
 
 class Graph:
     def __init__(self):
+        self.type = "N"
         self.matrix = []
         self.nodes = []
 
@@ -80,4 +81,10 @@ class Graph:
 
     def get_matrix(self):
         return self.matrix
+
+    def get_edges(self):
+        edges = 0
+        for i in range(len(self.nodes)):
+            edges += sum(self.matrix[i])
+        return edges
 
