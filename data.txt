@@ -1,8 +1,11 @@
-D
-a b
-c b
-d c
-b d
-f d
-d e
-e f
+W
+a b 1
+a e 1
+a d 1
+a c 2
+b e 1
+b c 1
+b d 2
+c e 1
+c d 1
+d e 1

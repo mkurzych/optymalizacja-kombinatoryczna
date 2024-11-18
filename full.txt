@@ -1,0 +1,11 @@
+W
+a b 6
+a c 4
+a d 8
+a e 2
+b c 5
+b d 8
+b e 6
+c d 9
+c e 3
+d e 7

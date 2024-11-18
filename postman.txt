@@ -1,0 +1,17 @@
+W
+a b 2
+a h 1
+b c 2
+b i 1
+c d 3
+d e 4
+d j 1
+d i 3
+e j 2
+e f 3
+f j 2
+f g 5
+g j 4
+g i 2
+g h 4
+h i 4

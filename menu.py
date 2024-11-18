@@ -1,5 +1,24 @@
+import networkx as nx
+
+from chinese_postman.main import chinese_postman
 from graphs import graph, directedGraph, createGraph
 from vertex_cover.main import vertex_cover
+from christofides.main import christofides
+import matplotlib.pyplot as plt
+
+weighted = False
+
+
+def plot_graph(graph):
+    pos = nx.shell_layout(graph)
+    edge_labels = nx.get_edge_attributes(graph, "weight")
+
+    nx.draw_networkx_nodes(graph, pos)
+    nx.draw_networkx_edges(graph, pos)
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels)
+    nx.draw_networkx_labels(graph, pos)
+    plt.show()
+
 
 def print_menu():
     print("1. Add node")
@@ -15,22 +34,31 @@ def print_menu():
     print("11. Get even degrees (Graph only)")
     print("12. Get odd degrees (Graph only)")
     print("13. Run vertex cover (Graph only)")
-    print("14. Plot graph")
-    print("15. Exit")
+    print("14. Find chinese postman path (WeightedGraph only)")
+    print("15. Run salesman problem (WeightedGraph only)")
+    print("16. Plot graph")
+    print("17. Exit")
 
 file_or_input = input("Do you want to read from file or input? (f/i): ")
 if file_or_input == "f":
     file_path = input("Enter file path: ")
-    graph = createGraph.create_graph(file_path)
-    graph.plot_graph()
+    data = createGraph.create_graph(file_path)
+    graph = data[0]
+    weighted = data[1]
+    if not weighted:
+        graph.plot_graph()
 elif file_or_input == "i":
     while True:
-        graph_type = input("Enter graph type (N/D): ")
+        graph_type = input("Enter graph type (N/D/W): ")
         if graph_type == "N":
             graph = graph.Graph()
             break
         elif graph_type == "D":
             graph = directedGraph.DirectedGraph()
+            break
+        elif graph_type == "W":
+            weighted = True
+            graph = nx.Graph()
             break
         else:
             print("Invalid graph type")
@@ -52,8 +80,13 @@ elif file_or_input == "i":
         except ValueError:
             print("Invalid input")
             continue
-        graph.add_edge(node1, node2)
-    graph.plot_graph()
+        if weighted:
+            weight = int(input("Enter weight: "))
+            graph.add_edge(node1, node2, weight=weight)
+        else:
+            graph.add_edge(node1, node2)
+    if not weighted:
+        graph.plot_graph()
 else:
     print("Invalid input")
 
@@ -63,21 +96,35 @@ while True:
     if choice == "1":
         label = input("Enter node label: ")
         graph.add_node(label)
-        graph.plot_graph()
+        if weighted:
+            plot_graph(graph)
+        else:
+            graph.plot_graph()
     elif choice == "2":
         label = input("Enter node label: ")
         graph.remove_node(label)
-        graph.plot_graph()
+        if weighted:
+            plot_graph(graph)
+        else:
+            graph.plot_graph()
     elif choice == "3":
         node1 = input("Enter first node label: ")
         node2 = input("Enter second node label: ")
-        graph.add_edge(node1, node2)
-        graph.plot_graph()
+        if weighted:
+            weight = int(input("Enter weight: "))
+            graph.add_edge(node1, node2, weight=weight)
+            plot_graph(graph)
+        else:
+            graph.add_edge(node1, node2)
+            graph.plot_graph()
     elif choice == "4":
         node1 = input("Enter first node label: ")
         node2 = input("Enter second node label: ")
         graph.remove_edge(node1, node2)
-        graph.plot_graph()
+        if weighted:
+            plot_graph(graph)
+        else:
+            graph.plot_graph()
     elif choice == "5" and graph.type == "N":
         label = input("Enter node label: ")
         print("Degree:", graph.get_degree(label))
@@ -100,9 +147,20 @@ while True:
     elif choice == "13" and graph.type == "N":
         cover = vertex_cover(graph)
         print("Cover:", cover)
-    elif choice == "14":
+    elif choice == "14" and weighted:
+        source = input("Enter source node: ")
+        weight, path = chinese_postman(graph, source)
+        print("Path:", path)
+        print("Weight:", weight)
+    elif choice == "15" and weighted:
+        source = input("Enter source node: ")
+        weight, path = christofides(graph, source)
+        print("Path:", path)
+        if weight:
+            print("Weight:", weight)
+    elif choice == "16" and not weighted:
         graph.plot_graph()
-    elif choice == "15":
+    elif choice == "17":
         break
     else:
         print("Invalid choice or method not available for this graph type.")
