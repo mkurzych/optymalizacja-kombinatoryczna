@@ -65,7 +65,7 @@ def visualize_network(graph):
         font_weight="bold",
         edge_color='black',
         width=1.5,
-        connectionstyle=connectionstyle
+        # connectionstyle=connectionstyle
     )
     try:
         labels = {
@@ -161,13 +161,14 @@ def parse_data(file_path):
     return tasks
 
 
-def hu_algorithm(graph):
+def hu_algorithm(graph, m):
     t = 0
     diagram = []
 
     while graph.nodes:
         busy = 0
-        print(f"Time: {t}")
+        if not (len(graph.nodes) == 1 and "super_root" in graph.nodes):
+            print(f"Time: {t}")
         to_remove = []
         sorted_nodes = sorted(graph.nodes(data=True),
                               key=lambda x: x[1]['level'],
@@ -176,7 +177,8 @@ def hu_algorithm(graph):
         for task in sorted_nodes:
             if graph.in_degree(task[0]) == 0 and busy < m:
                 busy += 1
-                print(f"Task {task[0]} started, level: {task[1]['level']}")
+                if task[0] != "super_root":
+                    print(f"Task {task[0]} started, level: {task[1]['level']}")
                 to_remove.append(task)
 
         temp = []
@@ -230,7 +232,7 @@ def main():
 
     visualize_network(working_graph)
 
-    diagram = hu_algorithm(working_graph)
+    diagram = hu_algorithm(working_graph, m)
 
     create_gantt_chart(diagram, m, mirror=mirror_gantt, ignore_node=ignore_super_root)
 
